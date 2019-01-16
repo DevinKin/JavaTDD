@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Connect4TDD.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tdd-ch5-design</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Connect4TDD.java</span></div><h1>Connect4TDD.java</h1><pre class="source lang-java linenums">import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.StringJoiner;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class Connect4TDD {
+    // 闇�姹�1
+    public int getNumberOfDiscs() {
+//        return 0;
+<span class="fc" id="L12">        return IntStream.range(0,COLUMNS)</span>
+<span class="fc" id="L13">                .map(this::getNumberOfDiscsInColumn).sum();</span>
+    }
+
+
+    // 闇�姹�2
+    private static final int ROWS = 6;
+    private static final int COLUMNS = 7;
+    private static final String EMPTY = &quot; &quot;;
+
+<span class="fc" id="L22">    private String[][] board = new String[ROWS][COLUMNS];</span>
+
+<span class="fc" id="L24">    public Connect4TDD(PrintStream printStream) {</span>
+<span class="fc" id="L25">        outputChannel = printStream;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        for (String[] row : board) {</span>
+<span class="fc" id="L27">            Arrays.fill(row, EMPTY);</span>
+        }
+<span class="fc" id="L29">    }</span>
+
+    private int getNumberOfDiscsInColumn(int column) {
+<span class="fc" id="L32">        return (int) IntStream.range(0,ROWS)</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">                .filter(row -&gt; !EMPTY.equals(board[row][column]))</span>
+<span class="fc" id="L34">                .count();</span>
+    }
+
+    public int putDiscInColumn(int column) {
+<span class="fc" id="L38">        checkColumn(column);</span>
+<span class="fc" id="L39">        int row = getNumberOfDiscsInColumn(column);</span>
+<span class="fc" id="L40">        checkPositionToInsert(row, column);</span>
+<span class="fc" id="L41">        board[row][column] = currentPlayer;</span>
+<span class="fc" id="L42">        printBoard();</span>
+<span class="fc" id="L43">        checkWinner(row,column);</span>
+<span class="fc" id="L44">        switchPlayer();</span>
+<span class="fc" id="L45">        return row;</span>
+    }
+
+    private void checkColumn(int column) {
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">        if (column &lt; 0 || column &gt;= COLUMNS) {</span>
+<span class="fc" id="L50">            throw new RuntimeException(&quot;Invalid column &quot; + column);</span>
+        }
+<span class="fc" id="L52">    }</span>
+
+    private void checkPositionToInsert(int row, int column) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (row == ROWS) {</span>
+<span class="fc" id="L56">            throw new RuntimeException(&quot;No more room in column &quot; + column);</span>
+        }
+<span class="fc" id="L58">    }</span>
+
+
+    // 闇�姹�3
+    private static final String RED = &quot;R&quot;;
+    private static final String GREEN = &quot;G&quot;;
+
+<span class="fc" id="L65">    private String currentPlayer = RED;</span>
+
+
+    public String getCurrentPlayer() {
+<span class="fc" id="L69">        outputChannel.printf(&quot;Player %s turn %n&quot;, currentPlayer);</span>
+<span class="fc" id="L70">        return currentPlayer;</span>
+    }
+
+    private void switchPlayer() {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (RED.equals(currentPlayer)) {</span>
+<span class="fc" id="L75">            currentPlayer = GREEN;</span>
+        } else {
+<span class="fc" id="L77">            currentPlayer = RED;</span>
+        }
+<span class="fc" id="L79">    }</span>
+
+
+    // 闇�姹�4
+    private static final String DELIMITER = &quot;|&quot;;
+
+    private PrintStream outputChannel;
+
+    private void printBoard() {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (int row = ROWS - 1; row &gt;= 0; row--) {</span>
+<span class="fc" id="L89">            StringJoiner stringJoiner = new StringJoiner(DELIMITER, DELIMITER, DELIMITER);</span>
+<span class="fc" id="L90">            Stream.of(board[row])</span>
+<span class="fc" id="L91">                    .forEachOrdered(stringJoiner::add);</span>
+<span class="fc" id="L92">            outputChannel.println(stringJoiner.toString());</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+
+    // 闇�姹�5
+    public boolean isFinished() {
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        return getNumberOfDiscs() == ROWS * COLUMNS;</span>
+    }
+
+
+
+    // 闇�姹�6
+    private static final int DISCS_TO_WIN = 4;
+<span class="fc" id="L106">    private String winner = &quot;&quot;;</span>
+
+    private void checkWinner(int row, int column) {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (winner.isEmpty()) {</span>
+<span class="fc" id="L110">            String color = board[row][column];</span>
+<span class="fc" id="L111">            Pattern winPattern = Pattern.compile(&quot;.*&quot; + color +</span>
+                    &quot;{&quot; + DISCS_TO_WIN + &quot;}.*&quot;);
+
+<span class="fc" id="L114">            String vertical = IntStream.range(0, ROWS)</span>
+<span class="fc" id="L115">                    .mapToObj(r -&gt; board[r][column])</span>
+<span class="fc" id="L116">                    .reduce(String::concat).get();</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (winPattern.matcher(vertical).matches()) {</span>
+<span class="fc" id="L118">                winner = color;</span>
+            }
+
+<span class="fc" id="L121">            String horizontal = Stream.of(board[row])</span>
+<span class="fc" id="L122">                    .reduce(String::concat).get();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            if (winPattern.matcher(horizontal).matches()) {</span>
+<span class="fc" id="L124">                winner = color;</span>
+            }
+
+            // 宸︿笂鍒板彸涓�
+<span class="fc" id="L128">            int startOffset = Math.min(column, row);</span>
+<span class="fc" id="L129">            int myColumn = column - startOffset;</span>
+<span class="fc" id="L130">            int myRow = row - startOffset;</span>
+<span class="fc" id="L131">            StringJoiner stringJoiner = new StringJoiner(&quot;&quot;);</span>
+            do {
+<span class="fc" id="L133">                stringJoiner.add(board[myRow++][myColumn++]);</span>
+<span class="fc bfc" id="L134" title="All 4 branches covered.">            } while (myColumn &lt; COLUMNS &amp;&amp; myRow &lt; ROWS);</span>
+
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            if (winPattern.matcher(stringJoiner.toString()).matches()) {</span>
+<span class="fc" id="L137">                winner = color;</span>
+            }
+
+            // 鍙充笅鍒板乏涓�
+<span class="fc" id="L141">            startOffset = Math.min(column, ROWS - row - 1);</span>
+<span class="fc" id="L142">            myColumn = column - startOffset;</span>
+<span class="fc" id="L143">            myRow = row + startOffset;</span>
+<span class="fc" id="L144">            stringJoiner = new StringJoiner(&quot;&quot;);</span>
+            do {
+<span class="fc" id="L146">                stringJoiner.add(board[myRow--][myColumn++]);</span>
+<span class="fc bfc" id="L147" title="All 4 branches covered.">            } while (myColumn &lt; COLUMNS &amp;&amp; myRow &gt;= 0);</span>
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (winPattern.matcher(stringJoiner.toString()).matches()) {</span>
+<span class="fc" id="L150">                winner = color;</span>
+            }
+        }
+<span class="fc" id="L153">    }</span>
+
+    public String getWinner() {
+<span class="fc" id="L156">        return winner;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

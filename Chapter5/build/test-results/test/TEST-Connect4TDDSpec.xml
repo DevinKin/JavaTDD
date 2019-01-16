@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Connect4TDDSpec" tests="16" skipped="0" failures="0" errors="0" timestamp="2019-01-16T14:38:36" hostname="DESKTOP-IJ7EK1M" time="0.111">
+  <properties/>
+  <testcase name="when4VerticalDiscsAreConnectedThenPlayerWins" classname="Connect4TDDSpec" time="0.047"/>
+  <testcase name="whenFirstDiscInsertedInColumnThenPositionIsZero" classname="Connect4TDDSpec" time="0.0"/>
+  <testcase name="whenDiscOutsideBoardThenRuntimeException" classname="Connect4TDDSpec" time="0.017"/>
+  <testcase name="when4Diagona12DiscsAreConnectedThenThatPlayerWins" classname="Connect4TDDSpec" time="0.004"/>
+  <testcase name="whenTheGameStartsItIsNotFinished" classname="Connect4TDDSpec" time="0.007"/>
+  <testcase name="whenDiscInsertedThenNumberOfDiscsIncreases" classname="Connect4TDDSpec" time="0.001"/>
+  <testcase name="whenADiscIsIntroducedTheBoardIsPrinted" classname="Connect4TDDSpec" time="0.001"/>
+  <testcase name="whenAskedForCurrentPlayerThenOutputNotice" classname="Connect4TDDSpec" time="0.0"/>
+  <testcase name="when4HorizontalDisAreConnectedThenPlayerWins" classname="Connect4TDDSpec" time="0.001"/>
+  <testcase name="whenSecondDiscInsertInColumnThenPositionIsOne" classname="Connect4TDDSpec" time="0.0"/>
+  <testcase name="whenDisCanBeIntroducedTheGamesIsFinished" classname="Connect4TDDSpec" time="0.017"/>
+  <testcase name="whenSecondPlayerPlaysColorIsGreen" classname="Connect4TDDSpec" time="0.0"/>
+  <testcase name="when4Diagona11DiscsAreConnectedThenThatPlayerWins" classname="Connect4TDDSpec" time="0.002"/>
+  <testcase name="whenNoMoreRoomInColumnThenRuntimeException" classname="Connect4TDDSpec" time="0.001"/>
+  <testcase name="whenTheGameIsStartedTheBoardIsEmpty" classname="Connect4TDDSpec" time="0.0"/>
+  <testcase name="whenFirstPlayerPlaysThenDiscColorIsRed" classname="Connect4TDDSpec" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
